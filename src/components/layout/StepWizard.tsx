@@ -1,16 +1,18 @@
 import React, { useMemo } from 'react';
 import { useProjectStore } from '../../store/projectStore.ts';
+import type { StepId } from '../../store/projectStore.ts';
 
 interface Step {
-  num: 1 | 2 | 3;
+  num: StepId;
   label: string;
   icon: string;
 }
 
 const STEPS: Step[] = [
-  { num: 1, label: 'Design', icon: '✂️' },
-  { num: 2, label: 'Size', icon: '📐' },
-  { num: 3, label: 'Pattern', icon: '🧶' },
+  { num: 1,   label: 'Design',  icon: '✂️' },
+  { num: 2,   label: 'Size',    icon: '📐' },
+  { num: 2.5, label: 'Pieces',  icon: '🧩' },
+  { num: 3,   label: 'Pattern', icon: '🧶' },
 ];
 
 export const StepWizard: React.FC = () => {
@@ -18,12 +20,15 @@ export const StepWizard: React.FC = () => {
   const setStep = useProjectStore((s) => s.setStep);
 
   const progressPercent = useMemo(() => {
-    return ((currentStep - 1) / (STEPS.length - 1)) * 100;
+    const idx = STEPS.findIndex((s) => s.num === currentStep);
+    return (Math.max(0, idx) / (STEPS.length - 1)) * 100;
   }, [currentStep]);
 
-  const handleStepClick = (step: 1 | 2 | 3) => {
+  const handleStepClick = (step: StepId) => {
     // Allow navigating to current or earlier steps, or to the next step
-    if (step <= currentStep + 1) {
+    const currentIdx = STEPS.findIndex((s) => s.num === currentStep);
+    const targetIdx = STEPS.findIndex((s) => s.num === step);
+    if (targetIdx <= currentIdx + 1) {
       setStep(step);
     }
   };
@@ -41,9 +46,11 @@ export const StepWizard: React.FC = () => {
       {/* Step circles */}
       <div className="step-wizard__steps">
         {STEPS.map((step) => {
+          const stepIdx = STEPS.findIndex((s) => s.num === step.num);
+          const currentIdx = STEPS.findIndex((s) => s.num === currentStep);
           const isActive = step.num === currentStep;
-          const isCompleted = step.num < currentStep;
-          const isClickable = step.num <= currentStep + 1;
+          const isCompleted = stepIdx < currentIdx;
+          const isClickable = stepIdx <= currentIdx + 1;
 
           return (
             <button

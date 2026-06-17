@@ -76,8 +76,8 @@ export interface Project {
   pieces: GarmentPiece[];
   /** Grid data keyed by piece name */
   grids: Map<string, GridData>;
-  /** Current wizard step (1 = measurements, 2 = design, 3 = chart) */
-  currentStep: 1 | 2 | 3;
+  /** Current wizard step (1 = measurements, 2 = design, 2.5 = pieces, 3 = chart) */
+  currentStep: 1 | 2 | 2.5 | 3;
   /** Crochet progress tracking */
   progress: ProgressState;
 }

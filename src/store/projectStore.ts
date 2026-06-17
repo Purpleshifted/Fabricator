@@ -6,16 +6,24 @@ import type {
 } from '../types/garment.ts';
 import type { GaugeConfig } from '../types/project.ts';
 import type { GridConfig } from '../types/grid.ts';
+import type { PatternPiece, PatternSet } from '../types/pattern.ts';
 import { DEFAULT_STYLE } from '../types/garment.ts';
+
+/** Ordered step sequence for next/prev navigation */
+const STEP_ORDER: StepId[] = [1, 2, 2.5, 3];
+
+export type StepId = 1 | 2 | 2.5 | 3;
 
 export interface ProjectState {
   // ---- State ----
-  currentStep: 1 | 2 | 3;
+  currentStep: StepId;
   style: GarmentStyle;
   size: Size;
   customMeasurements: Partial<BodyMeasurements> | null;
   gauge: GaugeConfig;
   grid: { config: GridConfig; cells: number[] } | null;
+  patternSet: PatternSet | null;
+  activePieceId: string | null;
 
   // ---- Extended style sliders (not part of GarmentStyle type) ----
   waistShaping: boolean;
@@ -25,12 +33,14 @@ export interface ProjectState {
   sleeveWidth: number;      // 0–1 normalized (0=fitted, 1=bell)
 
   // ---- Actions ----
-  setStep: (step: 1 | 2 | 3) => void;
+  setStep: (step: StepId) => void;
   setStyle: (style: Partial<GarmentStyle>) => void;
   setSize: (size: Size) => void;
   setGauge: (gauge: Partial<GaugeConfig>) => void;
   setCustomMeasurements: (m: Partial<BodyMeasurements>) => void;
   setGrid: (grid: { config: GridConfig; cells: number[] } | null) => void;
+  setPatternSet: (ps: PatternSet | null) => void;
+  setActivePieceId: (id: string | null) => void;
   nextStep: () => void;
   prevStep: () => void;
   resetProject: () => void;
@@ -58,6 +68,8 @@ const INITIAL_STATE = {
   customMeasurements: null,
   gauge: DEFAULT_GAUGE,
   grid: null,
+  patternSet: null,
+  activePieceId: null,
 
   // Extended style defaults
   waistShaping: true,
@@ -89,15 +101,22 @@ export const useProjectStore = create<ProjectState>((set) => ({
 
   setGrid: (grid) => set({ grid }),
 
+  setPatternSet: (ps) => set({ patternSet: ps }),
+  setActivePieceId: (id) => set({ activePieceId: id }),
+
   nextStep: () =>
-    set((state) => ({
-      currentStep: Math.min(state.currentStep + 1, 3) as 1 | 2 | 3,
-    })),
+    set((state) => {
+      const idx = STEP_ORDER.indexOf(state.currentStep);
+      const next = STEP_ORDER[Math.min(idx + 1, STEP_ORDER.length - 1)];
+      return { currentStep: next };
+    }),
 
   prevStep: () =>
-    set((state) => ({
-      currentStep: Math.max(state.currentStep - 1, 1) as 1 | 2 | 3,
-    })),
+    set((state) => {
+      const idx = STEP_ORDER.indexOf(state.currentStep);
+      const prev = STEP_ORDER[Math.max(idx - 1, 0)];
+      return { currentStep: prev };
+    }),
 
   resetProject: () => set(INITIAL_STATE),
 

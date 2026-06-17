@@ -16,6 +16,11 @@
     "vite": "^8.0.12"
   },
   "dependencies": {
+    "@freesewing/brian": "^4.9.0",
+    "@freesewing/config": "^4.9.0",
+    "@freesewing/core": "^4.9.0",
+    "@freesewing/library": "^4.9.0",
+    "@freesewing/plugin-transform": "^4.9.0",
     "idb": "^8.0.3",
     "jspdf": "^4.2.1",
     "react": "^19.2.7",

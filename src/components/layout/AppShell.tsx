@@ -132,7 +132,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
 
         .app-header__wizard {
           flex: 1;
-          max-width: 360px;
+          max-width: 460px;
         }
 
         .app-main {

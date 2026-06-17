@@ -3,6 +3,7 @@ import { useProjectStore } from './store/projectStore.ts';
 import { AppShell } from './components/layout/AppShell.tsx';
 import { StyleConfigurator } from './components/step1-style/StyleConfigurator.tsx';
 import { SizeConfigurator } from './components/step2-sizing/SizeConfigurator.tsx';
+import { PiecesOverview } from './components/step2-sizing/PiecesOverview.tsx';
 import PatternWorkspace from './components/step3-pattern/PatternWorkspace.tsx';
 import './components/step3-pattern/pattern.css';
 import { getMeasurements, applyEase } from './core/measurements.ts';
@@ -51,6 +52,7 @@ export const App: React.FC = () => {
     <AppShell>
       {currentStep === 1 && <StyleConfigurator />}
       {currentStep === 2 && <SizeConfigurator />}
+      {currentStep === 2.5 && <PiecesOverview />}
       {currentStep === 3 && <Step3Wrapper />}
     </AppShell>
   );
