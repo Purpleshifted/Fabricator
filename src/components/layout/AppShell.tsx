@@ -1,4 +1,5 @@
 import React from 'react';
+import { useProjectStore } from '../../store/projectStore.ts';
 import { StepWizard } from './StepWizard.tsx';
 
 interface AppShellProps {
@@ -6,6 +7,9 @@ interface AppShellProps {
 }
 
 export const AppShell: React.FC<AppShellProps> = ({ children }) => {
+  const currentStep = useProjectStore((s) => s.currentStep);
+  const isFullWidth = currentStep === 3;
+
   return (
     <div className="app-shell">
       {/* Header */}
@@ -63,11 +67,9 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
         </div>
       </header>
 
-      {/* Main content */}
-      <main className="app-main">
-        <div className="container">
-          {children}
-        </div>
+      {/* Main content — full width for Step 3, contained for Steps 1 & 2 */}
+      <main className={`app-main ${isFullWidth ? 'app-main--full' : ''}`}>
+        {isFullWidth ? children : <div className="container">{children}</div>}
       </main>
 
       <style>{`
@@ -86,6 +88,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
           border-bottom: 1px solid var(--color-border-subtle);
+          flex-shrink: 0;
         }
 
         .app-header__inner {
@@ -136,6 +139,13 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           flex: 1;
           padding-top: var(--space-8);
           padding-bottom: var(--space-12);
+        }
+
+        /* Step 3 (grid editor) — no container, no extra padding */
+        .app-main--full {
+          padding-top: 0;
+          padding-bottom: 0;
+          overflow: hidden;
         }
 
         @media (max-width: 768px) {

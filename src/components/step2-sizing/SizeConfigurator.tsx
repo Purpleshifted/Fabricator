@@ -19,14 +19,7 @@ export const SizeConfigurator: React.FC = () => {
 
   return (
     <div className="size-configurator step-content">
-      <div className="size-configurator__header">
-        <h2 className="text-xl font-semibold" style={{ color: 'var(--color-text-primary)' }}>
-          Size & Gauge
-        </h2>
-        <p className="text-sm" style={{ color: 'var(--color-text-secondary)', marginTop: 'var(--space-1)' }}>
-          Select your size, adjust measurements, and set your crochet gauge
-        </p>
-      </div>
+      <h2 className="size-configurator__heading">Size &amp; Gauge</h2>
 
       {/* Quick Size Selector */}
       <div className="size-configurator__quick-size">
@@ -55,7 +48,7 @@ export const SizeConfigurator: React.FC = () => {
         </div>
       </div>
 
-      {/* Footer */}
+      {/* Navigation */}
       <div className="size-configurator__footer">
         <button className="btn btn-secondary" onClick={prevStep} type="button">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -72,7 +65,10 @@ export const SizeConfigurator: React.FC = () => {
       </div>
 
       <style>{`
-        .size-configurator__header {
+        .size-configurator__heading {
+          font-size: var(--font-size-xl);
+          font-weight: var(--font-weight-semibold);
+          color: var(--color-text-primary);
           margin-bottom: var(--space-6);
         }
 

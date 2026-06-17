@@ -10,28 +10,33 @@ export const StyleConfigurator: React.FC = () => {
 
   return (
     <div className="style-configurator step-content">
-      <div className="style-configurator__header">
-        <h2 className="text-xl font-semibold" style={{ color: 'var(--color-text-primary)' }}>
-          Design Your Garment
-        </h2>
-        <p className="text-sm" style={{ color: 'var(--color-text-secondary)', marginTop: 'var(--space-1)' }}>
-          Choose the silhouette, neckline, sleeves, and overall shape
-        </p>
-      </div>
+      <h2 className="style-configurator__heading">Design Your Garment</h2>
 
-      <div className="style-configurator__body">
-        {/* Options Panel */}
-        <div className="style-configurator__options card">
-          <div className="style-configurator__sections">
-            <NecklineSelector />
-            <hr className="section-divider" />
-            <SleeveSelector />
-            <hr className="section-divider" />
-            <BodyShapeSelector />
+      <div className="style-configurator__layout">
+        {/* Left column — options, scrolls with page */}
+        <div className="style-configurator__options">
+          <div className="card">
+            <div className="style-configurator__sections">
+              <NecklineSelector />
+              <hr className="section-divider" />
+              <SleeveSelector />
+              <hr className="section-divider" />
+              <BodyShapeSelector />
+            </div>
+          </div>
+
+          {/* Continue button lives inside the options column */}
+          <div className="style-configurator__action">
+            <button className="btn btn-primary btn-lg" onClick={nextStep} type="button">
+              Continue to Sizing
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ marginLeft: '4px' }}>
+                <path d="M7 4L12 9L7 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
           </div>
         </div>
 
-        {/* Preview Panel */}
+        {/* Right column — preview, stays visible while scrolling */}
         <div className="style-configurator__preview card">
           <h3 className="section-title" style={{ textAlign: 'center' }}>Preview</h3>
           <GarmentPreview />
@@ -41,31 +46,27 @@ export const StyleConfigurator: React.FC = () => {
         </div>
       </div>
 
-      {/* Footer with Next button */}
-      <div className="style-configurator__footer">
-        <button className="btn btn-primary btn-lg" onClick={nextStep} type="button">
-          Continue to Sizing
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ marginLeft: '4px' }}>
-            <path d="M7 4L12 9L7 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
-      </div>
-
       <style>{`
-        .style-configurator__header {
+        .style-configurator__heading {
+          font-size: var(--font-size-xl);
+          font-weight: var(--font-weight-semibold);
+          color: var(--color-text-primary);
           margin-bottom: var(--space-6);
         }
 
-        .style-configurator__body {
+        .style-configurator__layout {
           display: grid;
           grid-template-columns: 1fr 340px;
           gap: var(--space-6);
           align-items: start;
         }
 
+        /* Options column — no max-height, scrolls naturally with the page */
         .style-configurator__options {
-          overflow-y: auto;
-          max-height: calc(100vh - 200px);
+          display: flex;
+          flex-direction: column;
+          gap: var(--space-6);
+          min-width: 0;
         }
 
         .style-configurator__sections {
@@ -73,24 +74,23 @@ export const StyleConfigurator: React.FC = () => {
           flex-direction: column;
         }
 
+        .style-configurator__action {
+          display: flex;
+          justify-content: flex-end;
+          padding-top: var(--space-2);
+        }
+
+        /* Preview column — sticky so it stays visible */
         .style-configurator__preview {
           position: sticky;
-          top: calc(var(--header-height) + var(--space-8));
+          top: calc(var(--header-height) + var(--space-6));
           display: flex;
           flex-direction: column;
           align-items: center;
         }
 
-        .style-configurator__footer {
-          display: flex;
-          justify-content: flex-end;
-          margin-top: var(--space-8);
-          padding-top: var(--space-6);
-          border-top: 1px solid var(--color-border-subtle);
-        }
-
         @media (max-width: 900px) {
-          .style-configurator__body {
+          .style-configurator__layout {
             grid-template-columns: 1fr;
           }
 
