@@ -17,6 +17,13 @@ export interface ProjectState {
   gauge: GaugeConfig;
   grid: { config: GridConfig; cells: number[] } | null;
 
+  // ---- Extended style sliders (not part of GarmentStyle type) ----
+  waistShaping: boolean;
+  ease: number;             // 0–8 inches, 0.5 increments
+  necklineDepth: number;    // 0–1 normalized
+  necklineWidth: number;    // 0–1 normalized
+  sleeveWidth: number;      // 0–1 normalized (0=fitted, 1=bell)
+
   // ---- Actions ----
   setStep: (step: 1 | 2 | 3) => void;
   setStyle: (style: Partial<GarmentStyle>) => void;
@@ -27,6 +34,13 @@ export interface ProjectState {
   nextStep: () => void;
   prevStep: () => void;
   resetProject: () => void;
+
+  // ---- Extended style setters ----
+  setWaistShaping: (on: boolean) => void;
+  setEase: (inches: number) => void;
+  setNecklineDepth: (v: number) => void;
+  setNecklineWidth: (v: number) => void;
+  setSleeveWidth: (v: number) => void;
 }
 
 const DEFAULT_GAUGE: GaugeConfig = {
@@ -44,6 +58,13 @@ const INITIAL_STATE = {
   customMeasurements: null,
   gauge: DEFAULT_GAUGE,
   grid: null,
+
+  // Extended style defaults
+  waistShaping: true,
+  ease: 3,
+  necklineDepth: 0.5,
+  necklineWidth: 0.5,
+  sleeveWidth: 0.5,
 };
 
 export const useProjectStore = create<ProjectState>((set) => ({
@@ -79,4 +100,11 @@ export const useProjectStore = create<ProjectState>((set) => ({
     })),
 
   resetProject: () => set(INITIAL_STATE),
+
+  // Extended style setters
+  setWaistShaping: (on) => set({ waistShaping: on }),
+  setEase: (inches) => set({ ease: inches }),
+  setNecklineDepth: (v) => set({ necklineDepth: v }),
+  setNecklineWidth: (v) => set({ necklineWidth: v }),
+  setSleeveWidth: (v) => set({ sleeveWidth: v }),
 }));
